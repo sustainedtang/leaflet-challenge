@@ -41,6 +41,7 @@ Your first task is to visualize an earthquake data set.
    * Your visualization should look something like the map above.
 
      ### Level 2: More Data (Optional)
+     
 
      ![5-Advanced](Images\5-Advanced.png)
 
