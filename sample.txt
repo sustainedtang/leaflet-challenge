@@ -1,0 +1,51 @@
+type: "FeatureCollection",
+metadata: {
+generated: 1627603408000,
+url: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson",
+title: "USGS All Earthquakes, Past Week",
+status: 200,
+api: "1.10.3",
+count: 2556
+},
+features: [
+{
+type: "Feature",
+properties: {
+mag: 1.5,
+place: "77 km NE of Ruby, Alaska",
+time: 1627602826267,
+updated: 1627603313156,
+tz: null,
+url: "https://earthquake.usgs.gov/earthquakes/eventpage/ak0219novb4y",
+detail: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/ak0219novb4y.geojson",
+felt: null,
+cdi: null,
+mmi: null,
+alert: null,
+status: "automatic",
+tsunami: 0,
+sig: 35,
+net: "ak",
+code: "0219novb4y",
+ids: ",ak0219novb4y,",
+sources: ",ak,",
+types: ",origin,",
+nst: null,
+dmin: null,
+rms: 0.96,
+gap: null,
+magType: "ml",
+type: "earthquake",
+title: "M 1.5 - 77 km NE of Ruby, Alaska"
+},
+
+geometry: {
+type: "Point",
+coordinates: [
+-154.3115,
+65.2248,
+3.2
+]
+},
+id: "ak0219novb4y"
+},
