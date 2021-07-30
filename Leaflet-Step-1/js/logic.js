@@ -1,32 +1,71 @@
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 d3.json(queryUrl).then(function(data) {
+  
   //get response, send data.features object to creatFeatures function
   createFeatures(data.features);}
   
   );
 
 
-
+  function mapStyle(feature) {
+    return {
+      opacity: 1,
+      fillOpacity: 1,
+      fillColor: mapColor(feature.properties.mag),
+      color: "#000000",
+      radius: mapRadius(feature.properties.mag),
+      stroke: true,
+      weight: 0.5
+    };
+  }
+  
+  function mapColor(mag) {
+    switch (true) {
+      case mag > 5:
+        return "#ea2c2c";
+      case mag > 4:
+        return "#eaa92c";
+      case mag > 3:
+        return "#d5ea2c";
+      case mag > 2:
+        return "#92ea2c";
+      case mag > 1:
+        return "#2ceabf";
+      default:
+        return "#2c99ea";
+    }
+  }
+  
+  function mapRadius(mag) {
+    if (mag === 0) {
+      return 1;
+    }
+  
+    return mag * 4;
+  }
+  
+  
 
   
 function createFeatures(earthquakeData) {
 
   //Define a function we want to run once for each feature in the array
   //give each feature a popup describing the place and time of the earthquake
-  function onEachFeature(feature, layer) {
-    
-    layer.bindPopup("<h3>Magnitude: " + feature.properties.mag +"</h3><h3>Location: "+ feature.properties.place +
-    "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
-  }
-
+  
   //Create GeoJSON layer, contain features array of earthquakeData object
   // Run onEachFeature function once for each piece of data in array
   var earthquakes = L.geoJSON(earthquakeData, {
-    onEachFeature: onEachFeature,
+    onEachFeature: function (feature, layer) {
+    
+      layer.bindPopup("<h3>Magnitude: " + feature.properties.mag +"</h3><h3>Location: "+ feature.properties.place +
+      "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
+    }
+  ,
     pointToLayer: function(feature, latlng) {
       return L.circleMarker(latlng);
-    }
+    },
+    style: mapStyle
     
     
   });
@@ -35,6 +74,8 @@ function createFeatures(earthquakeData) {
   //Send layer to createmap Function
   createMap(earthquakes);
 }
+
+
 
 
 
@@ -83,57 +124,36 @@ function createMap(earthquakes) {
     collapsed: false
   }).addTo(myMap);
 
-  function mapStyle(feature) {
-    return {
-      opacity: 1,
-      fillOpacity: 1,
-      fillColor: mapColor(feature.properties.mag),
-      color: "#000000",
-      radius: mapRadius(feature.properties.mag),
-      stroke: true,
-      weight: 0.5
-    };
-  }
-  
-  function mapColor(mag) {
-    switch (true) {
-      case mag > 5:
-        return "#ea2c2c";
-      case mag > 4:
-        return "#eaa92c";
-      case mag > 3:
-        return "#d5ea2c";
-      case mag > 2:
-        return "#92ea2c";
-      case mag > 1:
-        return "#2ceabf";
-      default:
-        return "#2c99ea";
-    }
-  }
-  
-  function mapRadius(mag) {
-    if (mag === 0) {
-      return 1;
-    }
-  
-    return mag * 4;
-  }
-  
   // Create a legend to display information about our map
-  var info = L.control({
-    position: 'topright'
+  var legend = L.control({
+    position: 'bottomright'
   });
-  
-  // // When the layer control is added, insert a div with the class of "legend"
-  // info.onAdd = function() {
-  // var div = L.DomUtil.create("div", "legend");
-  // return div;
-  // };
-  
-  // info.addTo(myMap);
-  
-  
 
+  // details for the legend
+  legend.onAdd = function() {
+    var div = L.DomUtil.create("div", "info legend");
+
+    var grades = [0, 1, 2, 3, 4, 5];
+    var colors = [
+      "#98ee00",
+      "#d4ee00",
+      "#eecc00",
+      "#ee9c00",
+      "#ea822c",
+      "#ea2c2c"
+    ];
+
+// Looping through
+for (var i = 0; i < grades.length; i++) {
+  div.innerHTML +=
+    "<i style='background: " + colors[i] + "'></i> " +
+    grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
 }
+return div;
+};
+  
+  legend.addTo(myMap);
+}
+
+
 
